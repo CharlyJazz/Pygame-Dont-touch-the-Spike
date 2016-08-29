@@ -1,2 +1,11 @@
-# Dont-touch-the-Spike
-Game make in Pygame.
+# Dont
+        Touch
+                the
+                      Spikes
+                      
+                      
+                      
+Game make in Pygame. 
+
+
+Status: Alpha

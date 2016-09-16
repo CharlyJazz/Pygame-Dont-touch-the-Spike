@@ -1,13 +1,10 @@
 # coding=utf-8
-
-import pygame
 import random
-from math import pi
 from Background import Background
 from Bird import Bird
 from Spike import Spike
 from Variables import *
-from Font import Create_text, Create_Score
+from Font import Create_Score
 
 
 pygame.init()
@@ -44,14 +41,36 @@ class Main(object):
         self.toplimit = False
         self.createRightlimit = False
         self.createLeftlimit = False
+        self.collitionActive = False
+        self.turn_Active = True
         """Handling Font"""
         self.score = 0
         self.HandlingScore = Create_Score(self.score)
 
+    def debug_true(self, x, y, z, w, zUp, wUp):
+        print x, '\t', y, '\t', z, '\t', w, '\t', zUp, '\t', wUp
+
+    def other_turn(self):
+                if self.rectCharacter[0] == WIDTH/2 or (self.rectCharacter[0] >= (WIDTH/2) and self.rectCharacter[0] < (WIDTH/2)+20):
+                    while self.turn_Active == True:
+                        print 'Exito muchachos.'
+                        self.turn_Active = False
+                    self.collitionActive = False
+
+    def collition(self):
+            if self.rectCharacter[0] >=  self.Spike_x and self.rectCharacter[0] <= self.Spike_x + 60 and (self.rectCharacter[1] >= self.Spike_y and self.rectCharacter[1] <= self.Spike_y + 60): #Si estan a la misma altura, y toca el parajo la pared.
+                    self.debug_true(self.rectCharacter[0], self.rectCharacter[1], self.Spike_x, self.Spike_y, self.Spike_x + 60, self.Spike_y+60)
+                    while self.collitionActive == False:
+                        self.score -= 10
+                        self.collitionActive = True
+
+
     def rightlimitbool(self):
+        self.turn_Active = True
         self.rightlimit = True
 
     def leftlimitbool(self):
+        self.turn_Active = True
         self.leftlimit = True
 
     def bottomlimitbool(self):
@@ -67,36 +86,37 @@ class Main(object):
 
         if self.x in [269, 270, 271, 272, 273, 274, 275, 276]:
             while self.rightlimit == False:
-                print 'TEST RIGHT!!!'
+                #print 'TEST RIGHT!!!'
                 self.rightlimitbool()
-                self.score += 10
+                if self.collitionActive == False:
+                    self.score += 10
                 self.HandlingScore = Create_Score(self.score)
                 self.leftlimit = False
 
         if self.x in [23, 24, 25, 26, 27, 28, 29]:
             while self.leftlimit == False:
-                print 'TEST LEFT!!!'
+                #print 'TEST LEFT!!!'
                 self.leftlimitbool()
-                self.score += 10
+                if self.collitionActive == False:
+                    self.score += 10
                 self.HandlingScore = Create_Score(self.score)
                 self.rightlimit = False
 
         if self.y < 26:
             while self.toplimit == False:
-                print 'TEST TOP!!!'
+                #print 'TEST TOP!!!'
                 self.toplimitbool()
                 self.bottomlimit = False
 
         if self.y > 510:
             while self.bottomlimit == False:
-                print 'TEST BOTTOM!!!'
+                #print 'TEST BOTTOM!!!'
                 self.bottomlimitbool()
                 self.toplimit = False
 
 
     def createSpikes(self):
-        """Reparar sentencias: Se ejecutan muchas veces, usar algun bucle y bandera
-                                Usar Bucle while para intentar evitar las iteraciones de sobra"""
+        """Function for creation of Sprites"""
         max = 450
         if self.rightlimit == True:
             while self.createRightlimit == False:
@@ -131,6 +151,9 @@ class Main(object):
                 screen.blit(self.spikeTOP, [22+i*62, 22])
             """Handling Text"""
             self.HandlingScore.ScoreText.draw(screen)
+            self.other_turn()
+            self.collition()
+
 
 
     def update(self):

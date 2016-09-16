@@ -6,15 +6,14 @@ import pygame
 
 
 
-class Bird(object):
+class Bird(pygame.sprite.Sprite):
     def __init__(self, x, y, vel):
-        self.x = x
-        self.y = y
         self.vel = vel
         self.radius = 25
         self.sprite = pygame.image.load(bird)
         self.rect = self.sprite.get_rect()
-        self.rect.topleft = (0, 54)
+        self.rect.x = x
+        self.rect.y = y
         self.gravity = 0.3
         self.game_status = game_on
 
@@ -22,27 +21,27 @@ class Bird(object):
         return self.rect
 
     def get_position(self):
-        return (self.x, self.y)
+        return (self.rect.x, self.rect.y)
 
     def draw(self, screen):
-        screen.blit(self.sprite, [self.x, self.y])
+        screen.blit(self.sprite, [self.rect.x, self.rect.y])
 
     def moving(self):
-        self.x += self.vel[0]
-        self.y += self.vel[1]
+        self.rect.x += self.vel[0]
+        self.rect.y += self.vel[1]
         self.vel[1] = 0.9*self.vel[1] + self.gravity*1.4
 
-        if self.x + self.rect.center[1] > WIDTH:
+        if self.rect.x > WIDTH-self.rect[3]: #RIGHT COLLITION
             self.vel[0] *= -1
 
-        if self.x - self.rect.center[0] < 0:
+        if self.rect.x < 0:                  #LEFT COLLITION
             self.vel[0] *= -1
 
-        if self.rect.height - self.rect.center[0] > self.y:
-            self.y += self.y/4
+        if self.rect.y > HEIGHT-self.rect[3]:#BOTTOM COLLITION
             self.vel[1] *= -1
 
-        if self.y > HEIGHT - self.rect.center[0]*2.3:
+        if self.rect.y < 0:                  #TOP COLLITION
+            self.rect.y += 3
             self.vel[1] *= -1
 
 
@@ -52,7 +51,7 @@ class Bird(object):
     def keydown(self):
         key = pygame.key.get_pressed()
 
-        if not self.game_status  and key[pygame.K_SPACE]:
+        if not self.game_status and key[pygame.K_SPACE]:
             self.game_status = True
             self.start()
 

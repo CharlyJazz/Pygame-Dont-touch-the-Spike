@@ -1,10 +1,11 @@
 # coding=utf-8
+import sys
 import random
 from Background import Background
 from Bird import Bird
 from Spike import Spike
 from Variables import *
-from Font import Create_Score
+from Font import Create_Score, Create_life, Create_menu
 
 
 pygame.init()
@@ -46,6 +47,13 @@ class Main(object):
         """Handling Font"""
         self.score = 0
         self.HandlingScore = Create_Score(self.score)
+        self.life = 3
+        self.HandlingLife = Create_life(self.life)
+        """Menu"""
+        self.HandlingMenu = Create_menu()
+        self.ElementMenu = [self.HandlingMenu.title1, self.HandlingMenu.title2, self.HandlingMenu.title3, self.HandlingMenu.intruction, self.HandlingMenu.copy_right]
+        self.mainScreen = True
+        self.starGame = False
 
     def debug_true(self, x, y, z, w, zUp, wUp):
         print x, '\t', y, '\t', z, '\t', w, '\t', zUp, '\t', wUp
@@ -62,6 +70,8 @@ class Main(object):
                     self.debug_true(self.rectCharacter[0], self.rectCharacter[1], self.Spike_x, self.Spike_y, self.Spike_x + 60, self.Spike_y+60)
                     while self.collitionActive == False:
                         self.score -= 10
+                        self.life -= 1
+                        self.HandlingLife = Create_life(self.life)
                         self.collitionActive = True
 
 
@@ -151,28 +161,51 @@ class Main(object):
                 screen.blit(self.spikeTOP, [22+i*62, 22])
             """Handling Text"""
             self.HandlingScore.ScoreText.draw(screen)
+            self.HandlingLife.LifeText.draw(screen)
             self.other_turn()
             self.collition()
-
-
 
     def update(self):
         self.world()
         self.Limit()
         self.createSpikes()
 
+    def menu(self):
+        """Menu Principal del Juego en Proceso"""
+        if self.mainScreen:
+            pygame.display.update()
+            screen.blit(self.background.image, self.background.rect)
+            pygame.draw.line(screen, (255,100,100), ([side2 / 2, 0]), ([side2 / 2, HEIGHT]), side2)
+            pygame.draw.line(screen, (255,100,25), [WIDTH - side2 / 2, 0], [WIDTH - side2 / 2, HEIGHT], side2)
+            pygame.draw.line(screen, (255,100,200), [0, 0], [WIDTH, 0], side1 - 9)
+            pygame.draw.line(screen, (0,100,25), [0, HEIGHT], [WIDTH, HEIGHT], side1 - 9)
+
+            for text in self.ElementMenu:
+                text.draw(screen)
+
+            for e in pygame.event.get():
+                if e.type == pygame.QUIT:
+                    sys.exit()
+                if e.type == pygame.KEYUP:
+                    self.startGame = True
+                    self.mainScreen = False
 
     def main(self):
         """"Grand Game"""
         while self.run:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    self.run = False
-            pygame.display.set_caption(caption)
-            pygame.display.update()
-            self.update()
-            self.character.update(screen)
-            self.spikeMain.update()
+            if self.mainScreen:
+                pygame.display.set_caption("Presiona una tecla!")
+                self.menu()
+                print "Menu"
+            elif self.startGame:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        self.run = False
+                pygame.display.set_caption(caption)
+                pygame.display.update()
+                self.update()
+                self.character.update(screen)
+                self.spikeMain.update()
 
         pygame.quit()
 

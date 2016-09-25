@@ -15,5 +15,6 @@ screen = pygame.display.set_mode(size)
 game_on = False
 game_over = False
 
+
 #600H
 #350W

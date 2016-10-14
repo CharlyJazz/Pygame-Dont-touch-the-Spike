@@ -68,5 +68,3 @@ class Bird(pygame.sprite.Sprite):
         self.moving()
         self.keydown()
         self.get_rect()
-
-

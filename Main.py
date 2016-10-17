@@ -71,23 +71,22 @@ class Main(object):
 
     def collition(self):
             """"El la primera condicion if evalua la collicion del pajaro con las
-            puas, las otras dos con las puas de los estremos inferior y superior
-            Problem: La colision no funciona con una lista, crear un bucle for
-            que itere por todas las posiciones de y"""
-            if self.rectCharacter[0] >=  self.Spike_x and self.rectCharacter[0] <= self.Spike_x + 60 and (self.rectCharacter[1] >= self.Spike_List_y and self.rectCharacter[1] <= self.Spike_List_y + 60): #Si estan a la misma altura, y toca el parajo la pared.
-                    while self.collitionActive == False:
-                        self.score -= 10
-                        self.life -= 1
-                        self.HandlingLife = Create_life(self.life)
-                        self.collitionActive = True
+            puas, las otras dos con las puas de los estremos inferior y superior"""
+            for n in self.Spike_List_y:
+                if self.rectCharacter[0] >=  self.Spike_x -10  and self.rectCharacter[0] <= self.Spike_x + 60 and (self.rectCharacter[1] >= n-40 and self.rectCharacter[1] <= n + 60):
+                        while self.collitionActive == False:
+                            self.score -= 10
+                            self.life -= 1
+                            self.HandlingLife = Create_life(self.life)
+                            self.collitionActive = True
 
-            elif self.rectCharacter[1] < 80: #TOP
+            if self.rectCharacter[1] < 80: #TOP
                 while self.collitionActive == False:
                     self.score -= 10
                     self.life -= 1
                     self.exit_game()
 
-            elif self.rectCharacter[1] >= HEIGHT - 130 and self.rectCharacter[1] <= HEIGHT: #BOTTOM
+            if self.rectCharacter[1] >= HEIGHT - 130 and self.rectCharacter[1] <= HEIGHT: #BOTTOM
                 while self.collitionActive == False:
                     self.score -= 10
                     self.life -= 1

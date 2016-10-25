@@ -5,7 +5,7 @@ from Background import Background
 from Bird import Bird
 from Spike import Spike
 from Variables import *
-from Font import Create_Score, Create_life, Create_menu
+from Font import Create_Score, Create_life, Create_menu, Create_TryAgain
 
 
 pygame.init()
@@ -57,6 +57,11 @@ class Main(object):
         self.ElementMenu = [self.HandlingMenu.title1, self.HandlingMenu.title2, self.HandlingMenu.title3,self.HandlingMenu.copy_right]
         self.mainScreen = True
         self.starGame = False
+        """"Try Again Handling"""
+        self.HandlingTryAgain = Create_TryAgain()
+        self.ElementTryAgain = [self.HandlingTryAgain.try_again, self.HandlingTryAgain.press_key]
+        self.endGame = False
+        self.game_over_pic = Background(gameover, [0, -20])
 
     def other_turn(self):
         """Esto maneja dos variables importantes, cuando llega a la mitad de
@@ -64,7 +69,6 @@ class Main(object):
         que cuando collisionemos con las paredes se puedan volver True."""
         if self.rectCharacter[0] == WIDTH/2 or (self.rectCharacter[0] >= (WIDTH/2) and self.rectCharacter[0] < (WIDTH/2)+20):
             while self.turn_Active == True:
-                print 'Exito muchachos.'
                 self.turn_Active = False
             self.collitionActive = False
 
@@ -119,7 +123,6 @@ class Main(object):
 
         if self.x in [269, 270, 271, 272, 273, 274, 275, 276]:
             while self.rightlimit == False:
-                #print 'TEST RIGHT!!!'
                 self.rightlimitbool()
                 if self.collitionActive == False:
                     self.score += 10
@@ -128,7 +131,6 @@ class Main(object):
 
         if self.x in [23, 24, 25, 26, 27, 28, 29]:
             while self.leftlimit == False:
-                #print 'TEST LEFT!!!'
                 self.leftlimitbool()
                 if self.collitionActive == False:
                     self.score += 10
@@ -137,13 +139,11 @@ class Main(object):
 
         if self.y < 26:
             while self.toplimit == False:
-                #print 'TEST TOP!!!'
                 self.toplimitbool()
                 self.bottomlimit = False
 
         if self.y > 510:
             while self.bottomlimit == False:
-                #print 'TEST BOTTOM!!!'
                 self.bottomlimitbool()
                 self.toplimit = False
 
@@ -151,7 +151,6 @@ class Main(object):
         """Function for creation of Sprites
            Problem: No se pintan las puas, encontrar el error"""
         max = 450
-        print self.Spike_List_y
 
         spikes = self.level()
         if self.rightlimit == True:
@@ -221,26 +220,46 @@ class Main(object):
             level = 3
             return level
         elif self.score >= 160:
-            level = random.randint(1,4)
+            level = random.randint(1, 4)
             return level
 
-
     def menu(self):
-        """Menu Principal del Juego en Proceso"""
+        """Menu Principal del Juego"""
         if self.mainScreen:
             pygame.display.update()
             screen.blit(self.background.image, self.background.rect)
-
 
             for text in self.ElementMenu:
                 text.draw(screen)
 
             for e in pygame.event.get():
                 if e.type == pygame.QUIT:
-                    sys.exit()
+                    self.exit_game()
                 if e.type == pygame.KEYUP:
                     self.startGame = True
                     self.mainScreen = False
+
+    def try_again(self):
+        """Menu para controlar la desicion si quieres o no volver a jugar"""
+        while self.endGame:
+            pygame.display.update()
+            screen.blit(self.background.image, self.background.rect)
+            screen.blit(self.game_over_pic.image, self.game_over_pic.rect)
+            self.HandlingScore.ScoreEnd.draw(screen)
+
+            for text in self.ElementTryAgain:
+                text.draw(screen)
+
+            for e in pygame.event.get():
+                if e.type == pygame.QUIT:
+                    self.endGame = False
+                    self.exit_game()
+                if e.type == pygame.KEYUP:
+                    self.endGame = False
+                    self.score = 0
+                    self.HandlingScore = Create_Score(self.score)
+                    self.life = 3
+                    self.HandlingLife = Create_life(self.life)
 
     def main(self):
         """"Grand Game"""
@@ -259,9 +278,8 @@ class Main(object):
                 self.update()
                 self.character.update(screen)
                 if self.score < 0 or self.life < 1:
-                    self.exit_game()
-
-
+                    self.endGame = True
+                    self.try_again()
         pygame.quit()
 
 if __name__ == "__main__":

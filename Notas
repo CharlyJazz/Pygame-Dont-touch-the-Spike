@@ -1,23 +1,4 @@
-spikes = self.level()
-    print spikes
-    if self.rightlimit == True:
-        while self.createRightlimit == False:
-            self.Spike_x = 25
-            for spike in range(0, spikes):
-                self.Spike_y = random.randint(80, max)
-                self.Right_or_Left = True
-                self.spikeMain = Spike(self.Spike_x, self.Spike_y, self.Right_or_Left)
-            self.createRightlimit = True
-            self.createLeftlimit = False
-            #print 'Righ limit>', '[', str(self.rightlimit), ' ', str(self.leftlimit), "]", '<Left limit'
 
-
-    if self.leftlimit == True:
-        while self.createLeftlimit == False:
-            self.Spike_x = 270
-            for spike in range(0, spikes):
-                self.Spike_y = random.randint(80, max)
-                self.Right_or_Left = False
-                self.spikeMain = Spike(self.Spike_x, self.Spike_y, self.Right_or_Left)
-            self.createLeftlimit = True
-            self.createRightlimit = False
+self.HandlingScore = Create_Score(self.score)
+self.HandlingLife = Create_life(self.life)
+Para actualizar los valores de la vida y el score y pintarlos correctamente

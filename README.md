@@ -2,4 +2,3 @@
                 
 Game make in Pygame. 
 
-Status: Alpha

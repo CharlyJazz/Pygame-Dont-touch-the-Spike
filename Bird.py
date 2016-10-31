@@ -16,6 +16,7 @@ class Bird(pygame.sprite.Sprite):
         self.rect.y = y
         self.gravity = 0.3
         self.game_status = game_on
+        self.jump_sound = pygame.mixer.Sound('jump.wav')
 
     def get_rect(self):
         return self.rect
@@ -44,9 +45,9 @@ class Bird(pygame.sprite.Sprite):
             self.rect.y += 3
             self.vel[1] *= -1
 
-
     def up(self):
         self.vel[1] -= 2
+        self.jump_sound.play()
 
     def keydown(self):
         key = pygame.key.get_pressed()
@@ -64,6 +65,7 @@ class Bird(pygame.sprite.Sprite):
         self.vel[0] = 3
 
     def update(self, screen):
+        self.jump_sound.set_volume(0.1)
         self.draw(screen)
         self.moving()
         self.keydown()

@@ -9,6 +9,10 @@ from Font import Create_Score, Create_life, Create_menu, Create_TryAgain
 
 
 pygame.init()
+pygame.mixer.init()
+pygame.mixer.music.load('music.mp3')
+pygame.mixer.music.set_volume(0.5)
+pygame.mixer.music.play(-1)
 
 class Main(object):
     def __init__(self):
@@ -88,13 +92,15 @@ class Main(object):
                 while self.collitionActive == False:
                     self.score -= 10
                     self.life -= 1
-                    self.exit_game()
+                    self.endGame = True
+                    self.try_again()
 
             if self.rectCharacter[1] >= HEIGHT - 130 and self.rectCharacter[1] <= HEIGHT: #BOTTOM
                 while self.collitionActive == False:
                     self.score -= 10
                     self.life -= 1
-                    self.exit_game()
+                    self.endGame = True
+                    self.try_again()
 
     def rightlimitbool(self):
         self.turn_Active = True
@@ -242,6 +248,7 @@ class Main(object):
     def try_again(self):
         """Menu para controlar la desicion si quieres o no volver a jugar"""
         while self.endGame:
+            pygame.mixer.music.fadeout(1)
             pygame.display.update()
             screen.blit(self.background.image, self.background.rect)
             screen.blit(self.game_over_pic.image, self.game_over_pic.rect)
@@ -255,11 +262,15 @@ class Main(object):
                     self.endGame = False
                     self.exit_game()
                 if e.type == pygame.KEYUP:
-                    self.endGame = False
+                    """LOOP ERROR IN BOTTOM AND TOP COLLITION"""
                     self.score = 0
                     self.HandlingScore = Create_Score(self.score)
                     self.life = 3
                     self.HandlingLife = Create_life(self.life)
+                    pygame.mixer.music.play(-1)
+                    self.main()
+                    self.endGame = False
+                    break
 
     def main(self):
         """"Grand Game"""
@@ -277,7 +288,7 @@ class Main(object):
                 pygame.display.update()
                 self.update()
                 self.character.update(screen)
-                if self.score < 0 or self.life < 1:
+                if self.life < 1:
                     self.endGame = True
                     self.try_again()
         pygame.quit()

@@ -1,15 +1,10 @@
 # coding=utf-8
-
-
 from Variables import *
 import pygame
-
-
 
 class Bird(pygame.sprite.Sprite):
     def __init__(self, x, y, vel):
         self.vel = vel
-        self.radius = 25
         self.sprite = pygame.image.load(bird)
         self.rect = self.sprite.get_rect()
         self.rect.x = x
@@ -32,20 +27,27 @@ class Bird(pygame.sprite.Sprite):
         self.rect.y += self.vel[1]
         self.vel[1] = 0.9*self.vel[1] + self.gravity*1.4
 
-        if self.rect.x > WIDTH-self.rect[3]: #RIGHT COLLITION
+        if self.rect.x > WIDTH-self.rect[3]:               #RIGHT COLLITION
             self.vel[0] *= -1
 
-        if self.rect.x < 0:                  #LEFT COLLITION
+        if self.rect.x < 0:                                #LEFT COLLITION
             self.vel[0] *= -1
 
-        if self.rect.y > HEIGHT-self.rect[3]:#BOTTOM COLLITION
+        if self.rect.y > HEIGHT-self.rect[3]*2.5:          #BOTTOM COLLITION
             self.vel[1] *= -1
 
-        if self.rect.y < 0:                  #TOP COLLITION
+        if self.rect.y < self.rect[3]*1.5:                 #TOP COLLITION
             self.rect.y += 3
             self.vel[1] *= -1
 
+    def pain(self, int):
+        """Getter for pain jump when the bird touch de SPIKES
+        top or bottom
+        """
+        self.vel[1] = int
+
     def up(self):
+        """Jump"""
         self.vel[1] -= 2
         self.jump_sound.play()
 

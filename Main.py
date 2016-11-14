@@ -58,7 +58,7 @@ class Main(object):
         self.HandlingLife = Create_life(self.life)
         """Menu"""
         self.HandlingMenu = Create_menu()
-        self.ElementMenu = [self.HandlingMenu.title1, self.HandlingMenu.title2, self.HandlingMenu.title3,self.HandlingMenu.copy_right]
+        self.ElementMenu = [self.HandlingMenu.title1, self.HandlingMenu.title2, self.HandlingMenu.title3, self.HandlingMenu.copy_right]
         self.mainScreen = True
         self.starGame = False
         """"Try Again Handling"""
@@ -91,16 +91,20 @@ class Main(object):
             if self.rectCharacter[1] < 80: #TOP
                 while self.collitionActive == False:
                     self.score -= 10
-                    self.life -= 1
                     self.endGame = True
-                    self.try_again()
+                    self.life -=1
+                    self.HandlingLife = Create_life(self.life)
+                    self.character.pain(random.randint(4,7))
+                    self.collitionActive = True
 
             if self.rectCharacter[1] >= HEIGHT - 130 and self.rectCharacter[1] <= HEIGHT: #BOTTOM
                 while self.collitionActive == False:
                     self.score -= 10
-                    self.life -= 1
                     self.endGame = True
-                    self.try_again()
+                    self.life -=1
+                    self.HandlingLife = Create_life(self.life)
+                    self.character.pain(-6)
+                    self.collitionActive = True
 
     def rightlimitbool(self):
         self.turn_Active = True
@@ -269,8 +273,6 @@ class Main(object):
                     self.HandlingLife = Create_life(self.life)
                     pygame.mixer.music.play(-1)
                     self.main()
-                    self.endGame = False
-                    break
 
     def main(self):
         """"Grand Game"""

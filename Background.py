@@ -1,6 +1,6 @@
 # coding=utf-8
-
 from pygame.sprite import *
+
 
 class Background(pygame.sprite.Sprite):
     def __init__(self, image_file, location):

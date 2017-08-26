@@ -1,8 +1,6 @@
 # coding=utf-8
 import pygame
 
-""""General Variables"""
-
 side1 = 50
 side2 = 25
 HEIGHT = 500+2*side1
@@ -14,7 +12,3 @@ background_game, spike, gameover, bird, jump, music = files
 screen = pygame.display.set_mode(size)
 game_on = False
 game_over = False
-
-
-#600H
-#350W

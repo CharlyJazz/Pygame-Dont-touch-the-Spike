@@ -1,7 +1,9 @@
 # coding=utf-8
 from Variables import *
 from Bird import Bird
+
 import pygame
+
 
 class Spike(object):
     def __init__(self, x, y, bool):
@@ -17,7 +19,6 @@ class Spike(object):
     def get_rect(self):
         return self.rect
 
-
     def draw(self):
         if self.bool == True:
             screen.blit(self.RIGHT, [self.position_x, self.position_y])
@@ -27,6 +28,3 @@ class Spike(object):
     def update(self):
         self.draw()
         self.get_rect()
-
-
-

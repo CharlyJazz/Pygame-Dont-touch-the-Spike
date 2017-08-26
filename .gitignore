@@ -8,3 +8,5 @@
 *.so
 *.pyc
 *.txt
+/env/
+/.idea/

@@ -1,6 +1,8 @@
 # coding=utf-8
 from Variables import *
+
 import pygame
+
 
 class Bird(pygame.sprite.Sprite):
     def __init__(self, x, y, vel):
@@ -17,7 +19,7 @@ class Bird(pygame.sprite.Sprite):
         return self.rect
 
     def get_position(self):
-        return (self.rect.x, self.rect.y)
+        return self.rect.x, self.rect.y
 
     def draw(self, screen):
         screen.blit(self.sprite, [self.rect.x, self.rect.y])
@@ -25,29 +27,28 @@ class Bird(pygame.sprite.Sprite):
     def moving(self):
         self.rect.x += self.vel[0]
         self.rect.y += self.vel[1]
-        self.vel[1] = 0.9*self.vel[1] + self.gravity*1.4
+        self.vel[1] = 0.9 * self.vel[1] + self.gravity * 1.4
 
-        if self.rect.x > WIDTH-self.rect[3]:               #RIGHT COLLITION
+        if self.rect.x > WIDTH - self.rect[3]:         # RIGHT COLLITION
             self.vel[0] *= -1
 
-        if self.rect.x < 0:                                #LEFT COLLITION
+        elif self.rect.x < 0:                        # LEFT COLLITION
             self.vel[0] *= -1
 
-        if self.rect.y > HEIGHT-self.rect[3]*2.5:          #BOTTOM COLLITION
+        elif self.rect.y > HEIGHT - self.rect[3] * 2.5:  # BOTTOM COLLITION
             self.vel[1] *= -1
 
-        if self.rect.y < self.rect[3]*1.5:                 #TOP COLLITION
+        elif self.rect.y < self.rect[3] * 1.5:         # TOP COLLITION
             self.rect.y += 3
             self.vel[1] *= -1
 
     def pain(self, int):
-        """Getter for pain jump when the bird touch de SPIKES
-        top or bottom
+        """
+        Getter for pain jump when the bird touch de SPIKES top or bottom
         """
         self.vel[1] = int
 
     def up(self):
-        """Jump"""
         self.vel[1] -= 2
         self.jump_sound.play()
 
@@ -58,9 +59,8 @@ class Bird(pygame.sprite.Sprite):
             self.game_status = True
             self.start()
 
-        if self.game_status and key[pygame.K_SPACE]:
+        elif self.game_status and key[pygame.K_SPACE]:
             self.up()
-
 
     def start(self):
         self.gravity = 0.3

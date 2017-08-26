@@ -81,73 +81,61 @@ class Main(object):
         self.game_over_pic = Background(gameover, [0, -20])
         self.endGame = False
 
-    def other_turn(self):
-        if self.rectCharacter[0] == WIDTH/2 or (self.rectCharacter[0] >= (WIDTH/2) and self.rectCharacter[0] < (WIDTH/2)+20):
+    def listenOtherTurn(self):
+        """"
+        Check if the bird pass the middle of the screen
+        """
+        if self.rectCharacter[0] == (WIDTH / 2) \
+                or (self.rectCharacter[0] >=(WIDTH / 2)
+                    and self.rectCharacter[0] < (WIDTH / 2) + 20): # Why + 20 ?
+
             self.collitionActive = False
 
-    def collition(self):
-            """"
-            El la primera condicion evalua la collicion del pajaro con las
-            puas, las otras dos con las puas de los extremos inferior y superior
-            """
-            for n in self.Spike_List_y:
-                if (self.rectCharacter[0] >= self.Spike_x - 10
+    def listenCollition(self):
+        """"
+        Check if bird collide
+        The first condition evaluates the 
+        collision of the bird with the spikes,
+        the other two with the spikes of the 
+        lower and upper ends
+        """
+        for n in self.Spike_List_y:
+            if (self.rectCharacter[0] >= self.Spike_x - 10
                 and self.rectCharacter[0] <= self.Spike_x + 60
                 and (self.rectCharacter[1] >= n-40
                 and self.rectCharacter[1] <= n + 60)):
-                    if self.rightlimit:
-                        while self.collitionActive == False:
-                            self.score -= 10
-                            self.life -= 1
-                            self.HandlingLife = Create_life(self.life)
-                            self.collitionActive = True
 
-                    elif self.leftlimit:
-                        while self.collitionActive == False:
-                            self.score -= 10
-                            self.life -= 1
-                            self.HandlingLife = Create_life(self.life)
-                            self.collitionActive = True
+                if self.rightlimit:
+                    while self.collitionActive == False:
+                        self.score -= 10
+                        self.life -= 1
+                        self.HandlingLife = Create_life(self.life)
+                        self.collitionActive = True
 
+                elif self.leftlimit:
+                    while self.collitionActive == False:
+                        self.score -= 10
+                        self.life -= 1
+                        self.HandlingLife = Create_life(self.life)
+                        self.collitionActive = True
 
-            if self.rectCharacter[1] < 80: #TOP
-                self.score -= 10
-                self.endGame = True
-                self.life -=1
-                self.HandlingLife = Create_life(self.life)
-                self.character.pain(random.randint(4,7))
+        if self.rectCharacter[1] < 80: #TOP
+            self.score -= 10
+            self.endGame = True
+            self.life -=1
+            self.HandlingLife = Create_life(self.life)
+            self.character.pain(random.randint(4,7))
 
-            elif self.rectCharacter[1] >= HEIGHT - 130 and self.rectCharacter[1] <= HEIGHT: #BOTTOM
-                self.score -= 10
-                self.endGame = True
-                self.life -=1
-                self.HandlingLife = Create_life(self.life)
-                self.character.pain(-6)
-
-    def rightlimitbool(self):
-        self.rightlimit = True
-        del self.spikeList[:]
-        del self.Spike_List_y[:]
-
-        self.createSpikes()
-
-
-    def leftlimitbool(self):
-        self.leftlimit = True
-        del self.spikeList[:]
-        del self.Spike_List_y[:]
-
-        self.createSpikes()
-
-    def bottomlimitbool(self):
-        self.bottomlimit = True
-
-    def toplimitbool(self):
-        self.toplimit = True
+        elif self.rectCharacter[1] >= HEIGHT - 130 and self.rectCharacter[1] <= HEIGHT: #BOTTOM
+            self.score -= 10
+            self.endGame = True
+            self.life -=1
+            self.HandlingLife = Create_life(self.life)
+            self.character.pain(-6)
 
     def listenLimit(self):
         """
-        Este metodo implementara todas las condiciones y dinamicas para cada interaccion
+        Check if the bird is on the left or right border
         """
         self.positionTuple = self.character.get_position()
         self.x, self.y = self.positionTuple
@@ -155,7 +143,8 @@ class Main(object):
         if self.x >= 269:
             while self.rightlimit == False:
                 self.leftlimit = False
-                self.rightlimitbool()
+                self.changeRightLimit()
+                self.createSpikes()
                 if self.collitionActive == False:
                     self.score += 10
                 self.HandlingScore = Create_Score(self.score)
@@ -163,20 +152,41 @@ class Main(object):
         elif self.x <= 23:
             while self.leftlimit == False:
                 self.rightlimit = False
-                self.leftlimitbool()
+                self.changeLeftLimit()
+                self.createSpikes()
                 if self.collitionActive == False:
                     self.score += 10
                 self.HandlingScore = Create_Score(self.score)
 
         if self.y < 26:
             while self.toplimit == False:
-                self.toplimitbool()
+                self.toplimit = True
                 self.bottomlimit = False
 
         elif self.y > 510:
             while self.bottomlimit == False:
-                self.bottomlimitbool()
+                self.bottomlimit = True
                 self.toplimit = False
+
+    def changeRightLimit(self):
+        """
+        Empty list of spikes and change rightlimit value
+        """
+        self.rightlimit = True
+        self.cleanSpikeList()
+
+        # self.createSpikes()
+
+    def changeLeftLimit(self):
+        """
+        Empty list of spikes and change leftlimit value
+        """
+        self.leftlimit = True
+        self.cleanSpikeList()
+
+    def cleanSpikeList(self):
+        del self.spikeList[:]
+        del self.Spike_List_y[:]
 
     def createSpikes(self):
         """
@@ -209,7 +219,7 @@ class Main(object):
                 self.createLeftlimit = True
                 self.createRightlimit = False
 
-    def world(self):
+    def drawGame(self):
         if self.run:
             screen.blit(self.background.image, self.background.rect)
 
@@ -225,11 +235,11 @@ class Main(object):
             self.HandlingScore.ScoreText.draw(screen)
             self.HandlingLife.LifeText.draw(screen)
 
-            self.other_turn()
+            self.listenOtherTurn()
 
-            self.collition()
+            self.listenCollition()
 
-    def draw_spike(self):
+    def drawSpike(self):
         """
         Update the spikes in the window
         """
@@ -237,9 +247,9 @@ class Main(object):
             for spike in self.spikeList: spike.update()
 
     def update(self):
-        self.world()
+        self.drawGame()
         self.listenLimit()
-        self.draw_spike()
+        self.drawSpike()
 
     def level(self):
         if self.score < 40:
@@ -261,7 +271,7 @@ class Main(object):
 
     def menu(self):
         """
-        Menu Principal del Juego
+        Main menu of the game
         """
         if self.mainScreen:
             pygame.display.update()
@@ -279,7 +289,7 @@ class Main(object):
 
     def try_again(self):
         """
-        Menu para controlar la desicion si quieres o no volver a jugar
+        Main for choice if play again or exit
         """
         while self.endGame:
             pygame.mixer.music.fadeout(1)
@@ -297,7 +307,6 @@ class Main(object):
                     self.exit_game()
                 if e.type == pygame.KEYUP:
                     sleep(1)
-                    """LOOP ERROR IN BOTTOM AND TOP COLLITION"""
                     self.score = 0
                     self.HandlingScore = Create_Score(self.score)
                     self.life = 3
@@ -306,7 +315,9 @@ class Main(object):
                     self.main()
 
     def main(self):
-        """"Grand Game"""
+        """
+        Main method for start the game
+        """
         while self.run:
             if self.mainScreen:
                 pygame.display.set_caption("Presiona una tecla!")

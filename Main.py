@@ -341,7 +341,7 @@ class Main(object):
 if __name__ == "__main__":
     pygame.init()
     pygame.mixer.init()
-    pygame.mixer.music.load('music.mp3')
+    pygame.mixer.music.load(music)
     pygame.mixer.music.set_volume(0.5)
     pygame.mixer.music.play(-1)
 

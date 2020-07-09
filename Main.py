@@ -31,11 +31,13 @@ class Main(object):
 
         """Object BIRD Instance"""
 
-        self.character = Bird(WIDTH/2, HEIGHT/2, [2, 0])
+        self.character = Bird(WIDTH / 2, HEIGHT / 2, [2, 0])
 
         """Object SPIKES Instance"""
 
-        self.Right_or_Left = True  #Saber si el Spike debe ir hacia la derecha o izquierda
+        self.Right_or_Left = (
+            True  # Saber si el Spike debe ir hacia la derecha o izquierda
+        )
         self.createSpikesBool = True
         self.hide = -60
         self.Spike_x = self.hide
@@ -70,14 +72,22 @@ class Main(object):
         """Menu"""
 
         self.HandlingMenu = Create_menu()
-        self.ElementMenu = [self.HandlingMenu.title1, self.HandlingMenu.title2, self.HandlingMenu.title3, self.HandlingMenu.copy_right]
+        self.ElementMenu = [
+            self.HandlingMenu.title1,
+            self.HandlingMenu.title2,
+            self.HandlingMenu.title3,
+            self.HandlingMenu.copy_right,
+        ]
         self.mainScreen = True
         self.starGame = False
 
         """"Try Again Handling"""
 
         self.HandlingTryAgain = Create_TryAgain()
-        self.ElementTryAgain = [self.HandlingTryAgain.try_again, self.HandlingTryAgain.press_key]
+        self.ElementTryAgain = [
+            self.HandlingTryAgain.try_again,
+            self.HandlingTryAgain.press_key,
+        ]
         self.game_over_pic = Background(gameover, [0, -20])
         self.endGame = False
 
@@ -85,9 +95,10 @@ class Main(object):
         """"
         Check if the bird pass the middle of the screen
         """
-        if self.rectCharacter[0] == (WIDTH / 2) \
-                or (self.rectCharacter[0] >=(WIDTH / 2)
-                    and self.rectCharacter[0] < (WIDTH / 2) + 20): # Why + 20 ?
+        if self.rectCharacter[0] == (WIDTH / 2) or (
+            self.rectCharacter[0] >= (WIDTH / 2)
+            and self.rectCharacter[0] < (WIDTH / 2) + 20
+        ):  # Why + 20 ?
 
             self.collitionActive = False
 
@@ -100,10 +111,13 @@ class Main(object):
         lower and upper ends
         """
         for n in self.Spike_List_y:
-            if (self.rectCharacter[0] >= self.Spike_x - 10
+            if (
+                self.rectCharacter[0] >= self.Spike_x - 10
                 and self.rectCharacter[0] <= self.Spike_x + 60
-                and (self.rectCharacter[1] >= n-40
-                and self.rectCharacter[1] <= n + 60)):
+                and (
+                    self.rectCharacter[1] >= n - 40 and self.rectCharacter[1] <= n + 60
+                )
+            ):
 
                 if self.rightlimit:
                     while self.collitionActive == False:
@@ -119,17 +133,19 @@ class Main(object):
                         self.HandlingLife = Create_life(self.life)
                         self.collitionActive = True
 
-        if self.rectCharacter[1] < 80: #TOP
+        if self.rectCharacter[1] < 80:  # TOP
             self.score -= 10
             self.endGame = True
-            self.life -=1
+            self.life -= 1
             self.HandlingLife = Create_life(self.life)
-            self.character.pain(random.randint(4,7))
+            self.character.pain(random.randint(4, 7))
 
-        elif self.rectCharacter[1] >= HEIGHT - 130 and self.rectCharacter[1] <= HEIGHT: #BOTTOM
+        elif (
+            self.rectCharacter[1] >= HEIGHT - 130 and self.rectCharacter[1] <= HEIGHT
+        ):  # BOTTOM
             self.score -= 10
             self.endGame = True
-            self.life -=1
+            self.life -= 1
             self.HandlingLife = Create_life(self.life)
             self.character.pain(-6)
 
@@ -201,7 +217,9 @@ class Main(object):
                 for spike in range(0, int(spikes)):
                     self.Spike_y = random.randint(80, 450)
                     self.Right_or_Left = True
-                    self.spikeMain = Spike(self.Spike_x, self.Spike_y, self.Right_or_Left)
+                    self.spikeMain = Spike(
+                        self.Spike_x, self.Spike_y, self.Right_or_Left
+                    )
                     self.spikeList.append(self.spikeMain)
                     self.Spike_List_y.append(self.Spike_y)
                 self.createRightlimit = True
@@ -213,7 +231,9 @@ class Main(object):
                 for spike in range(0, int(spikes)):
                     self.Spike_y = random.randint(80, 450)
                     self.Right_or_Left = False
-                    self.spikeMain = Spike(self.Spike_x, self.Spike_y, self.Right_or_Left)
+                    self.spikeMain = Spike(
+                        self.Spike_x, self.Spike_y, self.Right_or_Left
+                    )
                     self.spikeList.append(self.spikeMain)
                     self.Spike_List_y.append(self.Spike_y)
                 self.createLeftlimit = True
@@ -223,10 +243,24 @@ class Main(object):
         if self.run:
             screen.blit(self.background.image, self.background.rect)
 
-            pygame.draw.line(screen, self.color_margin, ([side2 / 2, 0]), ([side2 / 2, HEIGHT]), side2)
-            pygame.draw.line(screen, self.color_margin, [WIDTH - side2 / 2, 0], [WIDTH - side2 / 2, HEIGHT], side2)
+            pygame.draw.line(
+                screen,
+                self.color_margin,
+                ([side2 / 2, 0]),
+                ([side2 / 2, HEIGHT]),
+                side2,
+            )
+            pygame.draw.line(
+                screen,
+                self.color_margin,
+                [WIDTH - side2 / 2, 0],
+                [WIDTH - side2 / 2, HEIGHT],
+                side2,
+            )
             pygame.draw.line(screen, self.color_margin, [0, 0], [WIDTH, 0], side1 - 9)
-            pygame.draw.line(screen, self.color_margin, [0, HEIGHT], [WIDTH, HEIGHT], side1 - 9)
+            pygame.draw.line(
+                screen, self.color_margin, [0, HEIGHT], [WIDTH, HEIGHT], side1 - 9
+            )
 
             for i in range(0, 5):
                 screen.blit(self.spikeBOTTOM, [22 + i * 62, HEIGHT - 75])
@@ -244,7 +278,8 @@ class Main(object):
         Update the spikes in the window
         """
         if not self.collitionActive:
-            for spike in self.spikeList: spike.update()
+            for spike in self.spikeList:
+                spike.update()
 
     def update(self):
         self.drawGame()
@@ -337,6 +372,7 @@ class Main(object):
                     self.try_again()
 
         pygame.quit()
+
 
 if __name__ == "__main__":
     pygame.init()

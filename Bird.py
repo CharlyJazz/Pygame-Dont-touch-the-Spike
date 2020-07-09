@@ -13,7 +13,7 @@ class Bird(pygame.sprite.Sprite):
         self.rect.y = y
         self.gravity = 0.3
         self.game_status = game_on
-        self.jump_sound = pygame.mixer.Sound("jump.wav")
+        self.jump_sound = pygame.mixer.Sound(jump)
 
     def get_rect(self):
         return self.rect

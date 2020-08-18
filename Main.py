@@ -110,28 +110,27 @@ class Main(object):
         the other two with the spikes of the 
         lower and upper ends
         """
-        for n in self.Spike_List_y:
-            if (
-                self.rectCharacter[0] >= self.Spike_x - 10
-                and self.rectCharacter[0] <= self.Spike_x + 60
-                and (
-                    self.rectCharacter[1] >= n - 40 and self.rectCharacter[1] <= n + 60
-                )
-            ):
+        if (
+            # self.rectCharacter[0] >= self.Spike_x - 10
+            # and self.rectCharacter[0] <= self.Spike_x + 60
+            # and (
+            #     self.rectCharacter[1] >= n - 40 and self.rectCharacter[1] <= n + 60
+            # )
+            pygame.sprite.spritecollide(self.character, self.spikeList, False, pygame.sprite.collide_mask)
+        ):
+            if self.rightlimit:
+                while self.collitionActive == False:
+                    self.score -= 10
+                    self.life -= 1
+                    self.HandlingLife = Create_life(self.life)
+                    self.collitionActive = True
 
-                if self.rightlimit:
-                    while self.collitionActive == False:
-                        self.score -= 10
-                        self.life -= 1
-                        self.HandlingLife = Create_life(self.life)
-                        self.collitionActive = True
-
-                elif self.leftlimit:
-                    while self.collitionActive == False:
-                        self.score -= 10
-                        self.life -= 1
-                        self.HandlingLife = Create_life(self.life)
-                        self.collitionActive = True
+            elif self.leftlimit:
+                while self.collitionActive == False:
+                    self.score -= 10
+                    self.life -= 1
+                    self.HandlingLife = Create_life(self.life)
+                    self.collitionActive = True
 
         if self.rectCharacter[1] < 80:  # TOP
             self.score -= 10

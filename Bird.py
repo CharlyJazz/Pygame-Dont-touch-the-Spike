@@ -7,13 +7,15 @@ import pygame
 class Bird(pygame.sprite.Sprite):
     def __init__(self, x, y, vel):
         self.vel = vel
-        self.sprite = pygame.image.load(bird)
-        self.rect = self.sprite.get_rect()
+        self.image = pygame.image.load(spike)
+        self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
         self.gravity = 0.3
         self.game_status = game_on
         self.jump_sound = pygame.mixer.Sound(jump)
+        self.mask = pygame.mask.from_surface(self.image)
+        self.jump_sound.set_volume(0.1)
 
     def get_rect(self):
         return self.rect
@@ -22,7 +24,7 @@ class Bird(pygame.sprite.Sprite):
         return self.rect.x, self.rect.y
 
     def draw(self, screen):
-        screen.blit(self.sprite, [self.rect.x, self.rect.y])
+        screen.blit(self.image, [self.rect.x, self.rect.y])
 
     def moving(self):
         self.rect.x += self.vel[0]
@@ -67,8 +69,6 @@ class Bird(pygame.sprite.Sprite):
         self.vel[0] = 3
 
     def update(self, screen):
-        self.jump_sound.set_volume(0.1)
         self.draw(screen)
         self.moving()
         self.keydown()
-        self.get_rect()

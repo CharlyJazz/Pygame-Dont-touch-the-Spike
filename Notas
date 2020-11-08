@@ -1,4 +1,0 @@
-
-self.HandlingScore = Create_Score(self.score)
-self.HandlingLife = Create_life(self.life)
-Para actualizar los valores de la vida y el score y pintarlos correctamente

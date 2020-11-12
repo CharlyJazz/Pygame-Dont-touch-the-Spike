@@ -22,8 +22,8 @@ class Spawner:
             spikes.append(self.spawn_level_4())
 
         size = 65
-        [spikes.append(Spike(size, 1, 'TOP', i)) for i in range(1, 10)]
-        [spikes.append(Spike(size, 1, 'BOTTOM', i)) for i in range(1, 10)]
+        [spikes.append(Spike(size, 1, 'TOP', i)) for i in range(1, 13)]
+        [spikes.append(Spike(size, 1, 'BOTTOM', i)) for i in range(1, 13)]
 
         return spikes
 

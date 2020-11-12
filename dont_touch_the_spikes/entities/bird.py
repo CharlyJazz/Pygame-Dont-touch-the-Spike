@@ -1,23 +1,23 @@
-import pygame
 import numpy as np
 from dont_touch_the_spikes.settings.constants import *
+from dont_touch_the_spikes.utils.aspect_scale import *
 from pygame.transform import flip
+from pygame.image import load
+
+image_path = "assets/images/bird/"
+size = (45, 45)
 
 
 class Bird(pygame.sprite.Sprite):
     def __init__(self, callback_change_orientation):
         pygame.sprite.Sprite.__init__(self)
         self.images_flying = [
-            pygame.transform.scale(pygame.image.load(
-                "assets/images/bird/live_1.png").convert_alpha(), PLAYER_SIZE),
-            pygame.transform.scale(pygame.image.load(
-                "assets/images/bird/live_2.png").convert_alpha(), PLAYER_SIZE)
+            aspect_scale(load(image_path + "live_1.png").convert_alpha(), size),
+            aspect_scale(load(image_path + "live_2.png").convert_alpha(), size),
         ]
         self.images_dying = [
-            pygame.transform.scale(pygame.image.load(
-                "assets/images/bird/dead_1.png").convert_alpha(), PLAYER_SIZE),
-            pygame.transform.scale(pygame.image.load(
-                "assets/images/bird/dead_2.png").convert_alpha(), PLAYER_SIZE)
+            aspect_scale(load(image_path + "dead_1.png").convert_alpha(), size),
+            aspect_scale(load(image_path + "dead_2.png").convert_alpha(), size),
         ]
         self.image_index = 0
         self.image = flip(self.images_flying[self.image_index], True, False)
@@ -32,7 +32,7 @@ class Bird(pygame.sprite.Sprite):
         self.jumping = False
 
         # Animation
-        self.animation_cooldown = 250
+        self.animation_countdown = 250
         self.last_animation = pygame.time.get_ticks()
         self.dying = False
 
@@ -71,7 +71,7 @@ class Bird(pygame.sprite.Sprite):
 
     def try_animate_dying(self):
         time_now = pygame.time.get_ticks()
-        if time_now - self.last_animation >= self.animation_cooldown:
+        if time_now - self.last_animation >= self.animation_countdown:
             self.last_animation = pygame.time.get_ticks()
             self.animate_dying()
 
@@ -108,7 +108,7 @@ class Bird(pygame.sprite.Sprite):
 
     def try_animate(self):
         time_now = pygame.time.get_ticks()
-        if time_now - self.last_animation >= self.animation_cooldown:
+        if time_now - self.last_animation >= self.animation_countdown:
             self.last_animation = pygame.time.get_ticks()
             self.animate()
 
@@ -129,3 +129,8 @@ class Bird(pygame.sprite.Sprite):
     def disable_jump(self):
         self.jumping = False
         self.jump_linspace = self.create_jump_linspace()
+
+    def reset(self):
+        self.rect.center = CENTER
+        self.dying = False
+        self._orientation = - 1
